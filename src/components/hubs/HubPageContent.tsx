@@ -23,6 +23,8 @@ interface HubPageContentProps {
   page: number;
   totalPages: number;
   baseHref: string;
+  /** Passed to JobAlertsWidget so the alert query is contextual */
+  alertQuery?: string;
 }
 
 // ============================================================
@@ -35,6 +37,7 @@ export function HubPageContent({
   page,
   totalPages,
   baseHref,
+  alertQuery,
 }: HubPageContentProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -79,23 +82,40 @@ export function HubPageContent({
   const showingFrom = (page - 1) * 20 + 1;
   const showingTo = Math.min(page * 20, total);
 
-  // Empty state
+  // Sidebar content (always rendered — including empty state)
+  const sidebar = (
+    <div className="space-y-6 lg:col-span-1">
+      <SmartMatchingWidget />
+      <GoogleAdPlaceholder />
+      <TrendingSearchesWidget />
+      <CVAdWidget />
+      <JobAlertsWidget defaultQuery={alertQuery} />
+    </div>
+  );
+
+  // Empty state — shows CTA + sidebar with email capture
   if (jobs.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-white/50 px-6 py-16 text-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-          <SearchX className="h-8 w-8 text-gray-400" />
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-white/50 px-6 py-16 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+              <SearchX className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className="mt-4 text-lg font-bold text-gray-800">No jobs found</h3>
+            <p className="mt-1.5 max-w-sm text-sm text-gray-500">
+              Check back soon — new opportunities are added daily. Set up a
+              job alert and we&apos;ll notify you when matching jobs arrive.
+            </p>
+            <a
+              href="/jobs"
+              className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700"
+            >
+              Browse All Jobs →
+            </a>
+          </div>
         </div>
-        <h3 className="mt-4 text-lg font-bold text-gray-800">No jobs found</h3>
-        <p className="mt-1.5 max-w-sm text-sm text-gray-500">
-          Check back soon — new opportunities are added daily.
-        </p>
-        <a
-          href="/jobs"
-          className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700"
-        >
-          Browse All Jobs →
-        </a>
+        {sidebar}
       </div>
     );
   }
@@ -182,13 +202,7 @@ export function HubPageContent({
       </div>
 
       {/* Right: Marketing Sidebar (1/3) */}
-      <div className="space-y-6 lg:col-span-1">
-        <SmartMatchingWidget />
-        <GoogleAdPlaceholder />
-        <TrendingSearchesWidget />
-        <CVAdWidget />
-        <JobAlertsWidget />
-      </div>
+      {sidebar}
     </div>
   );
 }

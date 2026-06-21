@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 
 // ============================================================
@@ -100,10 +103,59 @@ export function CVAdWidget() {
 }
 
 // ============================================================
-// JOB ALERTS WIDGET
+// JOB ALERTS WIDGET (functional — posts to /api/subscribe)
 // ============================================================
 
-export function JobAlertsWidget() {
+export function JobAlertsWidget({ defaultQuery }: { defaultQuery?: string }) {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErrorMsg('');
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setErrorMsg('Please enter a valid email address');
+      return;
+    }
+
+    setStatus('loading');
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          frequency: 'DAILY',
+          query: defaultQuery || '',
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Subscription failed');
+      }
+
+      setStatus('success');
+      setEmail('');
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong');
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="rounded-xl border border-emerald-200/60 bg-gradient-to-br from-emerald-50 to-teal-50/80 p-5 shadow-sm text-center">
+        <span className="text-2xl">✅</span>
+        <h4 className="mt-2 text-sm font-bold text-emerald-700">You&apos;re subscribed!</h4>
+        <p className="mt-1 text-xs text-gray-600">We&apos;ll send you matching jobs to your inbox.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-xl border border-white/60 bg-white/70 p-5 backdrop-blur-sm">
       <div className="mb-2 flex items-center gap-2">
@@ -113,16 +165,26 @@ export function JobAlertsWidget() {
       <p className="text-xs text-gray-600">
         Get new jobs matching your profile delivered to your inbox.
       </p>
-      <div className="mt-3 flex flex-col gap-2">
+      <form onSubmit={handleSubmit} className="mt-3 flex flex-col gap-2">
         <input
           type="email"
           placeholder="Your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
           className="w-full rounded-lg border border-gray-300 bg-white/70 px-4 py-2 text-sm focus:border-emerald-600 focus:outline-none"
         />
-        <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">
-          Subscribe
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+        >
+          {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
         </button>
-      </div>
+        {errorMsg && (
+          <p className="text-xs text-red-600">{errorMsg}</p>
+        )}
+      </form>
     </div>
   );
 }

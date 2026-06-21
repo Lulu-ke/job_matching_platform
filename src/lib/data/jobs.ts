@@ -443,6 +443,59 @@ export async function getJobsByOrganization(
 }
 
 // ============================================================
+// CATEGORY × COUNTY COMBINATION (programmatic SEO)
+// ============================================================
+
+export async function getJobsByCategoryAndCounty(
+  categorySlug: string,
+  countyName: string,
+  page: number = 1,
+  limit: number = 20
+): Promise<PaginatedResult<JobWithOrg>> {
+  const where = {
+    ...activeJobWhere,
+    category: { slug: categorySlug },
+    locationCounty: { equals: countyName, mode: 'insensitive' as const },
+  };
+
+  const [data, total] = await Promise.all([
+    db.job.findMany({
+      where,
+      include: jobListInclude,
+      orderBy: { datePosted: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    db.job.count({ where }),
+  ]);
+
+  return {
+    data: data.map(mapJobWithOrg),
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
+}
+
+// ============================================================
+// CATEGORY × COUNTY COUNT (for NoIndex / sitemap decisions)
+// ============================================================
+
+export async function getJobCountByCategoryAndCounty(
+  categorySlug: string,
+  countyName: string
+): Promise<number> {
+  return db.job.count({
+    where: {
+      ...activeJobWhere,
+      category: { slug: categorySlug },
+      locationCounty: { equals: countyName, mode: 'insensitive' as const },
+    },
+  });
+}
+
+// ============================================================
 // GOVERNMENT JOBS
 // ============================================================
 

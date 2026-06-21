@@ -1,0 +1,22 @@
+/* TEAM */
+Founder: Lulu
+Site: https://jobr.co.ke
+Twitter: @jobr_ke
+Location: Nairobi, Kenya
+
+/* SITE */
+Last update: 2026/06/22
+Language: English
+Standards: HTML5, Next.js 16, React
+Framework: Next.js App Router
+CMS: Custom (Prisma ORM + MySQL)
+Doctype: HTML5
+IDE: VS Code
+
+/* THANKS */
+Next.js - https://nextjs.org
+Prisma - https://prisma.io
+Tailwind CSS - https://tailwindcss.com
+shadcn/ui - https://ui.shadcn.com
+Vercel - https://vercel.com
+Lucide Icons - https://lucide.dev

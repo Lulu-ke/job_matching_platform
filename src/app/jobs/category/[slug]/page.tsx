@@ -45,7 +45,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isEmpty = cat._count.jobs === 0 && !cat.seoDescription && !cat.description;
 
   const title = `${cat.label} Jobs in Kenya`;
-  const description = `Browse ${cat._count.jobs}+ ${cat.label.toLowerCase()} job vacancies across Kenya. Find verified positions, apply directly, and advance your career with JOBR.`;
+  // Strategy 1: Use seoDescription as content buffer when available
+  const description = cat.seoDescription
+    || `Browse ${cat._count.jobs}+ ${cat.label.toLowerCase()} job vacancies across Kenya. Find verified positions, apply directly, and advance your career with JOBR.`;
 
   return {
     title,
@@ -102,7 +104,7 @@ export default async function CategoryHubPage({ params, searchParams }: PageProp
 
   const collectionSchema = generateCollectionPageSchema({
     name: `${cat.label} Jobs in Kenya`,
-    description: `Browse verified ${cat.label.toLowerCase()} job vacancies across Kenya.`,
+    description: cat.seoDescription || `Browse verified ${cat.label.toLowerCase()} job vacancies across Kenya.`,
     url: `https://jobr.co.ke/jobs/category/${slug}`,
   });
 
@@ -169,6 +171,7 @@ export default async function CategoryHubPage({ params, searchParams }: PageProp
           page={jobsResult.page}
           totalPages={jobsResult.totalPages}
           baseHref={`/jobs/category/${slug}`}
+          alertQuery={cat.label}
         />
 
         {/* Related Categories */}

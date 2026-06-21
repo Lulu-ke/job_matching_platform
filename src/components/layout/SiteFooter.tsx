@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Twitter, Linkedin, Facebook, Instagram } from 'lucide-react';
 import { getAllCategories } from '@/lib/data/categories';
+import { UNIQUE_COUNTIES, TOP_COUNTIES } from '@/lib/data/counties';
 
 // ============================================================
 // FOOTER LINKS (fixed paths)
@@ -140,7 +141,7 @@ export async function SiteFooter() {
           <div>
             <h4 className="font-semibold text-white">Popular Categories</h4>
             <ul className="mt-2 space-y-1 text-sm text-gray-400">
-              {categories.slice(0, 15).map((cat) => (
+              {categories.slice(0, 10).map((cat) => (
                 <li key={cat.slug}>
                   <Link
                     href={`/jobs/category/${cat.slug}`}
@@ -155,8 +156,8 @@ export async function SiteFooter() {
         </div>
 
         {/* SEO Category Links Bar (Strategy 3 — all 49 categories as plain links) */}
-        {categories.length > 15 && (
-          <div className="mt-8 border-t border-gray-800 pt-6">
+        {categories.length > 10 && (
+          <div className="mt-6 border-t border-gray-800 pt-5">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
               All Job Categories
             </p>
@@ -173,6 +174,24 @@ export async function SiteFooter() {
             </div>
           </div>
         )}
+
+        {/* SEO County Links Bar (Strategy 3 — all 47 counties for crawl budget) */}
+        <div className="mt-6 border-t border-gray-800 pt-5">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">
+            Jobs by County
+          </p>
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
+            {UNIQUE_COUNTIES.map((county) => (
+              <Link
+                key={county.slug}
+                href={`/jobs/county/${county.slug}`}
+                className="text-xs text-gray-500 transition hover:text-gray-300"
+              >
+                {county.name}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-gray-800 pt-6 sm:flex-row">

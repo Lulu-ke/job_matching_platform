@@ -143,6 +143,7 @@ export default async function LevelHubPage({ params, searchParams }: PageProps) 
           page={jobsResult.page}
           totalPages={jobsResult.totalPages}
           baseHref={`/jobs/level/${slug}`}
+          alertQuery={label}
         />
 
         {/* Other Levels */}

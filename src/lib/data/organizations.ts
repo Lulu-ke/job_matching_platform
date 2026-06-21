@@ -170,3 +170,36 @@ export async function getOrganizationsByType(
     _count: org._count,
   }));
 }
+
+// ============================================================
+// ALL ORGANIZATIONS FOR INDEX PAGE
+// ============================================================
+
+export async function getAllOrganizationsForIndex(): Promise<OrganizationListItem[]> {
+  const orgs = await db.organization.findMany({
+    where: {
+      isActive: true,
+      deletedAt: null,
+    },
+    include: {
+      _count: {
+        select: {
+          jobs: { where: { status: 'ACTIVE', deletedAt: null } },
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return orgs.map((org) => ({
+    id: org.id,
+    orgName: org.orgName,
+    orgSlug: org.orgSlug,
+    orgLogoUrl: org.orgLogoUrl,
+    orgIndustry: org.orgIndustry as unknown as string,
+    orgType: org.orgType,
+    headquarters: org.headquarters,
+    isVerified: org.isVerified,
+    _count: org._count,
+  }));
+}

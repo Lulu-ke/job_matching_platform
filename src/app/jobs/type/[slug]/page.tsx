@@ -143,6 +143,7 @@ export default async function TypeHubPage({ params, searchParams }: PageProps) {
           page={jobsResult.page}
           totalPages={jobsResult.totalPages}
           baseHref={`/jobs/type/${slug}`}
+          alertQuery={label}
         />
 
         {/* Other Employment Types */}

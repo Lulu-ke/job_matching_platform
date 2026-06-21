@@ -30,6 +30,8 @@ export interface CategoryWithSubcategories extends CategoryWithCount {
       jobs: number;
     };
   }[];
+  seoDescription?: string | null;
+  seoTitle?: string | null;
 }
 
 export interface SubcategoryWithCategory {

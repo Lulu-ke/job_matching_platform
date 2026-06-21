@@ -14,11 +14,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // ----- Fetch dynamic data in parallel -----
-  const [jobSlugs, categories, opportunitySlugs, orgSlugs] = await Promise.all([
+  const [jobSlugs, categories, opportunitySlugs, orgSlugs, categoryCountyCombos] = await Promise.all([
     getActiveJobSlugs(),
     getAllCategories().catch(() => []),
     getActiveOpportunitySlugs().catch(() => []),
     getActiveOrganizationSlugs().catch(() => []),
+    getCategoryCountyCombos().catch(() => []),
   ]);
 
   const entries: MetadataRoute.Sitemap = [];
@@ -106,8 +107,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // ============================================================
-  // 5. EMPLOYMENT TYPE HUB PAGES (priority 0.6)
+  // 5. TYPE & LEVEL INDEX PAGES (priority 0.6)
   // ============================================================
+
+  entries.push({
+    url: `${SITE_URL}/jobs/type`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  });
+
+  entries.push({
+    url: `${SITE_URL}/jobs/level`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  });
+
+  entries.push({
+    url: `${SITE_URL}/organizations`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  });
+
+  // ============================================================
+  // 6. EMPLOYMENT TYPE HUB PAGES (priority 0.6)
+  // ===========================================================
 
   for (const type of Object.values(EmploymentType)) {
     const slug = type.toLowerCase().replace(/_/g, '-');
@@ -120,7 +146,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // ============================================================
-  // 6. EXPERIENCE LEVEL HUB PAGES (priority 0.6)
+  // 7. EXPERIENCE LEVEL HUB PAGES (priority 0.6)
   // ============================================================
 
   for (const level of Object.values(ExperienceLevel)) {
@@ -134,7 +160,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // ============================================================
-  // 7. OPPORTUNITY DETAIL PAGES (priority 0.7)
+  // 8. CATEGORY × COUNTY COMBINATION PAGES (priority 0.5)
+  // ============================================================
+
+  for (const combo of categoryCountyCombos) {
+    entries.push({
+      url: `${SITE_URL}/jobs/category/${combo.categorySlug}/${combo.countySlug}`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.5,
+    });
+  }
+
+  // ============================================================
+  // 9. OPPORTUNITY DETAIL PAGES (priority 0.7)
   // ============================================================
 
   for (const opp of opportunitySlugs) {
@@ -147,7 +186,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // ============================================================
-  // 8. ORGANIZATION PROFILE PAGES (priority 0.7)
+  // 10. ORGANIZATION PROFILE PAGES (priority 0.7)
   // ============================================================
 
   for (const org of orgSlugs) {
@@ -160,7 +199,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // ============================================================
-  // 9. RESOURCE ARTICLE PAGES (priority 0.5)
+  // 11. RESOURCE ARTICLE PAGES (priority 0.5)
   // ============================================================
 
   const resourceSlugs = [
@@ -202,6 +241,26 @@ async function getActiveOpportunitySlugs(): Promise<{ slug: string; updatedAt: D
     select: { slug: true, updatedAt: true },
     orderBy: { updatedAt: 'desc' },
   });
+}
+
+async function getCategoryCountyCombos(): Promise<{ categorySlug: string; countySlug: string }[]> {
+  const combos = await db.job.findMany({
+    where: { status: JobStatus.ACTIVE, deletedAt: null, categoryId: { not: null }, locationCounty: { not: null } },
+    select: { category: { select: { slug: true } }, locationCounty: true },
+    distinct: ['categoryId', 'locationCounty'],
+  });
+
+  return combos
+    .filter(c => c.category && c.locationCounty)
+    .map((c) => {
+      const countyData = UNIQUE_COUNTIES.find(
+        (co) => co.name.toLowerCase() === (c.locationCounty || '').toLowerCase()
+      );
+      return {
+        categorySlug: c.category!.slug,
+        countySlug: countyData?.slug || c.locationCounty!.toLowerCase().replace(/\s+/g, '-'),
+      };
+    });
 }
 
 async function getActiveOrganizationSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {

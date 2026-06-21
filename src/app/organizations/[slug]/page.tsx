@@ -68,6 +68,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ? org.orgDescription.slice(0, 155)
       : `Find the latest jobs and career opportunities at ${org.orgName}. Browse verified positions and apply directly on JOBR Kenya.`;
 
+  const isEmpty = org._count.jobs === 0;
+
   return {
     title,
     description,
@@ -79,6 +81,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'profile',
     },
     twitter: { card: 'summary_large_image', title, description },
+    ...(isEmpty && { robots: { index: false, follow: true } }),
   };
 }
 

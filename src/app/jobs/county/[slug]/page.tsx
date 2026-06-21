@@ -88,8 +88,12 @@ export default async function CountyHubPage({ params, searchParams }: PageProps)
     { label: `${county.name} County` },
   ];
 
-  // Nearby counties (show 8 others)
-  const otherCounties = KENYA_COUNTIES.filter((c) => c.slug !== slug).slice(0, 12);
+  // Nearby counties (geographically grouped — show 8 others)
+  const currentIdx = UNIQUE_COUNTIES.findIndex(c => c.slug === slug);
+  const nearbyCounties = currentIdx >= 0
+    ? [...UNIQUE_COUNTIES.slice(Math.max(0, currentIdx - 3), currentIdx),
+       ...UNIQUE_COUNTIES.slice(currentIdx + 1, currentIdx + 9)]
+    : KENYA_COUNTIES.filter((c) => c.slug !== slug).slice(0, 12);
 
   const collectionSchema = generateCollectionPageSchema({
     name: `Jobs in ${county.name} County, Kenya`,
@@ -137,15 +141,16 @@ export default async function CountyHubPage({ params, searchParams }: PageProps)
           page={jobsResult.page}
           totalPages={jobsResult.totalPages}
           baseHref={`/jobs/county/${slug}`}
+          alertQuery={`Jobs in ${county.name}`}
         />
 
         {/* Other Counties */}
         <div className="mt-10 border-t border-gray-200/50 pt-8">
           <h2 className="mb-4 text-lg font-extrabold text-gray-800">
-            Browse Jobs in Other Counties
+            Browse Jobs in Nearby Counties
           </h2>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {otherCounties.map((c) => (
+            {nearbyCounties.map((c) => (
               <Link
                 key={c.slug}
                 href={`/jobs/county/${c.slug}`}
