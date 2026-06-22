@@ -78,3 +78,21 @@ Stage Summary:
 - All 6 SEO strategies from the manifest are now implemented (1: Content Buffer via seoDescription fields, 2: Fallback pending, 3: Footer category links, 4: Seed jobs deferred, 5: NoIndex for empty pages, 6: Email alert widgets on empty pages)
 - Sitemap covers all page types including organizations, opportunities, resources, static pages
 - Zero new TypeScript/lint errors introduced
+---
+Task ID: 1
+Agent: main
+Task: Fix JobReady Kenya Vercel deployment - jobs not clickable, pages returning 500
+
+Work Log:
+- Identified root cause: app used SQLite (incompatible with Vercel serverless filesystem)
+- Tested remote MySQL connection (d7.my-control-panel.com) - confirmed working with 89 jobs, 35 orgs, 15 opportunities
+- Updated db.ts with MySQL fallback DATABASE_URL in both repos (Lulu-ke and amungadev-ai)
+- Discovered Vercel project was connected to amungadev-ai/jobready_kenya repo
+- Added vercel.json to force Prisma client regeneration (cleared stale SQLite cache)
+- Fixed MySQL connection limit error (max_user_connections) by reducing pool to connection_limit=1
+- Verified ALL pages now return HTTP 200: /jobs, /jobs/[slug], /organizations, /opportunities, /government, /jobs/category/*, /jobs/county/*, /sitemap.xml
+
+Stage Summary:
+- All pages working on https://jobready-kenya-mu.vercel.app
+- Three fixes applied: db.ts MySQL fallback, vercel.json cache bust, connection_limit=1
+- Debug endpoint added then removed
