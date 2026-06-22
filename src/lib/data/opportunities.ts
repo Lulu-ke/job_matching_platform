@@ -33,7 +33,9 @@ export interface PaginatedOpportunityResult {
 }
 
 export interface OpportunitySearchParams {
+  query?: string;
   type?: OpportunityType;
+  county?: string;
   sort?: 'newest' | 'deadline-soon' | 'deadline-later';
   page?: number;
   limit?: number;
@@ -133,7 +135,9 @@ export async function searchOpportunities(
   params: OpportunitySearchParams
 ): Promise<PaginatedOpportunityResult> {
   const {
+    query,
     type,
+    county,
     sort = 'newest',
     page = 1,
     limit = 20,
@@ -141,8 +145,20 @@ export async function searchOpportunities(
 
   const where: Record<string, unknown> = { ...activeOpportunityWhere };
 
+  if (query) {
+    where.OR = [
+      { title: { contains: query } },
+      { providerName: { contains: query } },
+      { description: { contains: query } },
+    ];
+  }
+
   if (type) {
     where.type = type;
+  }
+
+  if (county) {
+    where.locationCounty = { contains: county };
   }
 
   // Determine sort order

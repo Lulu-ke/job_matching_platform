@@ -8,7 +8,7 @@ import {
   Check,
 } from 'lucide-react';
 import { BreadcrumbNav } from '@/components/shared/BreadcrumbNav';
-import { Input } from '@/components/ui/input';
+import { WaitlistForm } from '@/components/shared/WaitlistForm';
 import { Button } from '@/components/ui/button';
 
 // ============================================================
@@ -246,24 +246,12 @@ export default function PostJobPage() {
             We&apos;re putting the finishing touches on the employer dashboard.
             Sign up to get early access and post your first job for free.
           </p>
-          <form
-            className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <Input
-              type="email"
-              placeholder="Enter your work email"
-              className="flex-1 bg-white/80"
-              aria-label="Work email address"
-            />
-            <Button
-              type="submit"
-              className="bg-emerald-600 text-white hover:bg-emerald-700"
-            >
-              Get Early Access
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </form>
+          <WaitlistForm
+            source="employer-waitlist"
+            placeholder="Enter your work email"
+            buttonText="Get Early Access"
+            className="mx-auto mt-6 max-w-md"
+          />
           <p className="mt-3 text-xs text-gray-500">
             We&apos;ll only email you about the employer launch. No spam.
           </p>

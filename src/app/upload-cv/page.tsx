@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { Brain, Zap, ShieldCheck, Upload, Sparkles, ArrowRight } from 'lucide-react';
 import { BreadcrumbNav } from '@/components/shared/BreadcrumbNav';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { WaitlistForm } from '@/components/shared/WaitlistForm';
 
 // ============================================================
 // METADATA
@@ -159,24 +158,12 @@ export default function UploadCVPage() {
             We&apos;re building the smartest CV matching engine for the Kenyan
             job market. Be the first to know when it launches.
           </p>
-          <form
-            className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <Input
-              type="email"
-              placeholder="Enter your email address"
-              className="flex-1 bg-white/80"
-              aria-label="Email address"
-            />
-            <Button
-              type="submit"
-              className="bg-emerald-600 text-white hover:bg-emerald-700"
-            >
-              Notify Me
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </form>
+          <WaitlistForm
+            source="cv-waitlist"
+            placeholder="Enter your email address"
+            buttonText="Notify Me"
+            className="mx-auto mt-6 max-w-md"
+          />
           <p className="mt-3 text-xs text-gray-500">
             No spam, ever. Unsubscribe anytime. We respect your privacy.
           </p>

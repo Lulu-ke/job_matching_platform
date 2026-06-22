@@ -513,12 +513,45 @@ export default async function OpportunityDetailPage({ params }: PageProps) {
             <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-gray-500">
               <div className="flex items-center gap-3">
                 <span className="font-medium">Share:</span>
-                <a href="#" className="transition hover:text-emerald-600">&#x1F4E7;</a>
-                <a href="#" className="transition hover:text-emerald-600">&#x1F426;</a>
-                <a href="#" className="transition hover:text-emerald-600">&#x1F4BC;</a>
-                <a href="#" className="transition hover:text-emerald-600">&#x1F4F1;</a>
+                <a
+                  href={`mailto:?subject=${encodeURIComponent(opp.title)}&body=${encodeURIComponent(`Check out this opportunity on JOBR Kenya: ${opp.title}\n\nhttps://jobr.co.ke/opportunities/${opp.slug}`)}`}
+                  className="transition hover:text-emerald-600"
+                  title="Share via email"
+                >
+                  &#x1F4E7;
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(opp.title)}&url=${encodeURIComponent(`https://jobr.co.ke/opportunities/${opp.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-emerald-600"
+                  title="Share on X (Twitter)"
+                >
+                  &#x1F426;
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://jobr.co.ke/opportunities/${opp.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-emerald-600"
+                  title="Share on LinkedIn"
+                >
+                  &#x1F4BC;
+                </a>
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${opp.title} — https://jobr.co.ke/opportunities/${opp.slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-emerald-600"
+                  title="Share on WhatsApp"
+                >
+                  &#x1F4F1;
+                </a>
               </div>
-              <a href="#" className="text-xs text-gray-400 transition hover:text-red-500">
+              <a
+                href={`mailto:hello@jobr.co.ke?subject=Report: ${encodeURIComponent(opp.title)}&body=${encodeURIComponent(`I'd like to report this opportunity: https://jobr.co.ke/opportunities/${opp.slug}\n\nReason: `)}`}
+                className="text-xs text-gray-400 transition hover:text-red-500"
+              >
                 Report this opportunity
               </a>
             </div>

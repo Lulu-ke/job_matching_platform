@@ -172,34 +172,72 @@ export async function getOrganizationsByType(
 }
 
 // ============================================================
-// ALL ORGANIZATIONS FOR INDEX PAGE
+// ALL ORGANIZATIONS FOR INDEX PAGE (with search, filters, pagination)
 // ============================================================
 
-export async function getAllOrganizationsForIndex(): Promise<OrganizationListItem[]> {
-  const orgs = await db.organization.findMany({
-    where: {
-      isActive: true,
-      deletedAt: null,
-    },
-    include: {
-      _count: {
-        select: {
-          jobs: { where: { status: 'ACTIVE', deletedAt: null } },
+export interface OrganizationSearchParams {
+  search?: string;
+  orgType?: string;
+  orgIndustry?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedOrganizations {
+  data: OrganizationListItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export async function searchOrganizations(params: OrganizationSearchParams): Promise<PaginatedOrganizations> {
+  const { search, orgType, orgIndustry, page = 1, limit = 24 } = params;
+
+  const where: any = { isActive: true, deletedAt: null };
+
+  if (search) {
+    where.orgName = { contains: search };
+  }
+  if (orgType) {
+    where.orgType = orgType;
+  }
+  if (orgIndustry) {
+    where.orgIndustry = orgIndustry;
+  }
+
+  const [data, total] = await Promise.all([
+    db.organization.findMany({
+      where,
+      include: {
+        _count: {
+          select: {
+            jobs: { where: { status: 'ACTIVE', deletedAt: null } },
+          },
         },
       },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
+      orderBy: { orgName: 'asc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    db.organization.count({ where }),
+  ]);
 
-  return orgs.map((org) => ({
-    id: org.id,
-    orgName: org.orgName,
-    orgSlug: org.orgSlug,
-    orgLogoUrl: org.orgLogoUrl,
-    orgIndustry: org.orgIndustry as unknown as string,
-    orgType: org.orgType,
-    headquarters: org.headquarters,
-    isVerified: org.isVerified,
-    _count: org._count,
-  }));
+  return {
+    data: data.map((org) => ({
+      id: org.id,
+      orgName: org.orgName,
+      orgSlug: org.orgSlug,
+      orgLogoUrl: org.orgLogoUrl,
+      orgIndustry: org.orgIndustry as unknown as string,
+      orgType: org.orgType,
+      headquarters: org.headquarters,
+      isVerified: org.isVerified,
+      _count: org._count,
+    })),
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
 }

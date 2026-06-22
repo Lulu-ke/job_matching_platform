@@ -1,15 +1,13 @@
 import type { Metadata } from 'next';
-import { Mail, MapPin, Clock, Send, MessageSquare } from 'lucide-react';
+import { Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
 import { BreadcrumbNav } from '@/components/shared/BreadcrumbNav';
+import { ContactForm } from '@/components/shared/ContactForm';
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
 
 // ============================================================
 // METADATA
@@ -122,80 +120,12 @@ export default function ContactPage() {
 
       {/* ── Contact Form + Info ── */}
       <section className="mb-16 grid gap-10 lg:grid-cols-5">
-        {/* Form */}
+        {/* Form (client component with API submission) */}
         <div className="rounded-xl border border-gray-200/60 bg-white/70 p-6 backdrop-blur-sm lg:col-span-3 sm:p-8">
           <h2 className="mb-6 text-xl font-bold text-gray-900">
             Send Us a Message
           </h2>
-
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label
-                  htmlFor="contact-name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Full Name
-                </label>
-                <Input
-                  id="contact-name"
-                  placeholder="Jane Wanjiru"
-                  className="border-gray-300 bg-white/70 focus:border-emerald-600"
-                />
-              </div>
-              <div className="space-y-2">
-                <label
-                  htmlFor="contact-email"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Email Address
-                </label>
-                <Input
-                  id="contact-email"
-                  type="email"
-                  placeholder="jane@example.com"
-                  className="border-gray-300 bg-white/70 focus:border-emerald-600"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label
-                htmlFor="contact-subject"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Subject
-              </label>
-              <Input
-                id="contact-subject"
-                placeholder="Partnership enquiry"
-                className="border-gray-300 bg-white/70 focus:border-emerald-600"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label
-                htmlFor="contact-message"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Message
-              </label>
-              <Textarea
-                id="contact-message"
-                rows={5}
-                placeholder="Tell us how we can help you..."
-                className="border-gray-300 bg-white/70 focus:border-emerald-600"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="bg-emerald-600 text-white hover:bg-emerald-700"
-            >
-              <Send className="h-4 w-4" />
-              Send Message
-            </Button>
-          </form>
+          <ContactForm />
         </div>
 
         {/* Sidebar info */}
