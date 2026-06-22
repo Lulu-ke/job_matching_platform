@@ -56,8 +56,12 @@ interface PageProps {
 // ============================================================
 
 export async function generateStaticParams() {
-  const slugs = await getAllOpportunitySlugs();
-  return slugs.map((slug) => ({ slug }));
+  try {
+    const slugs = await getAllOpportunitySlugs();
+    return slugs.map((slug) => ({ slug }));
+  } catch {
+    return [];
+  }
 }
 
 // ============================================================

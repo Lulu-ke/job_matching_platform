@@ -10,6 +10,12 @@ import { HubPageContent } from '@/components/hubs/HubPageContent';
 import { generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/utils/seo';
 
 // ============================================================
+// RENDERING MODE
+// ============================================================
+
+export const dynamic = 'force-dynamic';
+
+// ============================================================
 // TYPES
 // ============================================================
 
