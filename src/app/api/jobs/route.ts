@@ -43,9 +43,10 @@ export async function GET(request: Request) {
       totalPages: result.totalPages,
     });
   } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
     console.error('Jobs API error:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch jobs' },
+      { error: 'Failed to fetch jobs', detail: msg, stack: error instanceof Error ? error.stack?.slice(0, 500) : undefined },
       { status: 500 }
     );
   }
