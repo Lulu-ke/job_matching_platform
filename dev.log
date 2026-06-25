@@ -1,9 +1,180 @@
 ▲ Next.js 16.2.9 (Turbopack)
 - Local:         http://localhost:3000
-- Network:       http://21.0.11.68:3000
+- Network:       http://0.0.0.0:3000
 - Environments: .env
-✓ Ready in 388ms
+✓ Ready in 391ms
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
 
-rg/docs/messages/middleware-to-proxy
+ GET / 200 in 5.7s (next.js: 159ms, application-code: 5.6s)
+ GET /login 200 in 993ms (next.js: 14ms, application-code: 978ms)
+ GET /signup 200 in 1371ms (next.js: 700ms, application-code: 672ms)
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://0.0.0.0:3000
+- Environments: .env
+✓ Ready in 438ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
 
+⚠ Blocked cross-origin request to Next.js dev resource /_next/static/chunks/%5Broot-of-the-server%5D__0a-r3gn._.css from an unknown source.
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+This request did not include an allowlistable source host.
+If you need it to succeed, make sure the browser sends an Origin or Referer from a host listed in "allowedDevOrigins".
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ POST /api/auth/register 201 in 5.6s (next.js: 1206ms, application-code: 4.4s)
+ GET / 200 in 6.1s (next.js: 225ms, application-code: 5.9s)
+ GET /api/auth/csrf 200 in 1402ms (next.js: 1387ms, application-code: 15ms)
+ POST /api/auth/callback/credentials 302 in 451ms (next.js: 17ms, application-code: 434ms)
+ GET / 200 in 2.5s (next.js: 4ms, application-code: 2.5s)
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async DashboardLayout (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:283:21)',
+  name: 'TypeError'
+}
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async DashboardPage (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1zlamra._.js:60:21)',
+  name: 'TypeError'
+}
+ GET /api/auth/session 200 in 29ms (next.js: 19ms, application-code: 11ms)
+ GET /dashboard 307 in 2.8s (next.js: 1633ms, proxy.ts: 111ms, application-code: 1062ms)
+ GET /api/counties 200 in 872ms (next.js: 263ms, application-code: 609ms)
+ GET /api/categories?limit=20 200 in 2.2s (next.js: 352ms, application-code: 1818ms)
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async DashboardLayout (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:283:21)',
+  name: 'TypeError'
+}
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async ApplicationsPage (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__0s6a3w3._.js:60:21)',
+  name: 'TypeError'
+}
+⚠ Blocked cross-origin request to Next.js dev resource /__nextjs_font/geist-latin.woff2 from "preview-chat-1c7e8829-63fe-4612-9f85-ceb7701dee17.space-z.ai".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['preview-chat-1c7e8829-63fe-4612-9f85-ceb7701dee17.space-z.ai'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /dashboard/applications 307 in 1398ms (next.js: 691ms, proxy.ts: 8ms, application-code: 699ms)
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async DashboardLayout (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:283:21)',
+  name: 'TypeError'
+}
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async SavedPage (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__144mu0r._.js:60:21)',
+  name: 'TypeError'
+}
+ GET /dashboard/saved 307 in 1337ms (next.js: 665ms, proxy.ts: 5ms, application-code: 666ms)
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async DashboardLayout (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:283:21)',
+  name: 'TypeError'
+}
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async ProfilePage (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1ywhjff._.js:60:21)',
+  name: 'TypeError'
+}
+ GET /dashboard/profile 307 in 1799ms (next.js: 782ms, proxy.ts: 6ms, application-code: 1011ms)
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://0.0.0.0:3000
+- Environments: .env
+✓ Ready in 296ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET /jobs/category/technology-it 200 in 11.2s (next.js: 5.3s, generate-params: 2.7s, application-code: 5.9s)
+ GET /api/auth/csrf 200 in 756ms (next.js: 729ms, application-code: 27ms)
+ POST /api/auth/callback/credentials 302 in 1968ms (next.js: 19ms, application-code: 1949ms)
+ GET /api/auth/session 200 in 40ms (next.js: 25ms, application-code: 15ms)
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async DashboardLayout (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:283:21)',
+  name: 'TypeError'
+}
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error token.sub is not a function {
+  message: 'token.sub is not a function',
+  stack: 'TypeError: token.sub is not a function\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:139:41)\n' +
+    '    at Object.session (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:13829:52)\n' +
+    '    at async AuthHandler (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:15813:37)\n' +
+    '    at async getServerSession (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_0ij2yiq._.js:19424:21)\n' +
+    '    at async requireAuth (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1_6yz4u._.js:180:21)\n' +
+    '    at async DashboardPage (/home/z/my-project/.next/dev/server/chunks/ssr/[root-of-the-server]__1zlamra._.js:60:21)',
+  name: 'TypeError'
+}
+ GET /api/counties 200 in 1179ms (next.js: 562ms, application-code: 617ms)
+ GET /dashboard 307 in 2.6s (next.js: 1521ms, proxy.ts: 110ms, application-code: 1003ms)

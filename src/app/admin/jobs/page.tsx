@@ -1,34 +1,43 @@
-import { requireRole } from "@/lib/auth-helper"
-import { db } from "@/lib/db"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { JobsAdminClient } from "./JobsAdminClient"
+import { requireRole } from '@/lib/auth-helper'
+import { db } from '@/lib/db'
+import AdminJobsClient from './AdminJobsClient'
 
-export default async function AdminJobsPage() {
-  await requireRole("ADMIN")
+export default async function AdminJobsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; status?: string }>
+}) {
+  await requireRole('ADMIN')
+  const params = await searchParams
+  const page = parseInt(params.page || '1')
+  const limit = 20
+  const where: Record<string, unknown> = { deletedAt: null }
+  if (params.status && params.status !== 'ALL') where.status = params.status
 
-  const jobs = await db.job.findMany({
-    orderBy: { datePosted: "desc" },
-    select: {
-      id: true, title: true, status: true, featured: true, datePosted: true,
-      organization: { select: { orgName: true } },
-    },
-    take: 100,
-  })
+  const [jobs, total] = await Promise.all([
+    db.job.findMany({
+      where,
+      include: {
+        _count: { select: { applications: true } },
+        organization: { select: { orgName: true } },
+        postedBy: { select: { name: true, email: true } },
+      },
+      orderBy: { datePosted: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    db.job.count({ where }),
+  ])
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Jobs</h1>
-        <p className="text-gray-500 mt-1">Manage all job listings</p>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">All Jobs ({jobs.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <JobsAdminClient jobs={JSON.parse(JSON.stringify(jobs))} />
-        </CardContent>
-      </Card>
-    </div>
-  )
+  const data = {
+    jobs: jobs.map((j) => ({
+      id: j.id, title: j.title, status: j.status, employmentType: j.employmentType,
+      datePosted: j.datePosted.toISOString(), appCount: j._count.applications,
+      orgName: j.organization?.orgName || null,
+      postedBy: j.postedBy?.name || j.postedBy?.email || null,
+    })),
+    total, page, totalPages: Math.ceil(total / limit),
+  }
+
+  return <AdminJobsClient data={data} />
 }

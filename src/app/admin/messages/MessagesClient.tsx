@@ -1,73 +1,96 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Trash2, Eye, Mail } from "lucide-react"
+import { useState } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Mail, Eye, Trash2, CheckCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
-interface Message {
-  id: string
-  name: string
-  email: string
-  subject: string
-  message: string
-  isRead: boolean
-  createdAt: string
-}
+export default function MessagesClient({ messages: initialMsgs }: {
+  messages: { id: string; name: string; email: string; subject: string; message: string; isRead: boolean; date: string }[]
+}) {
+  const [msgs, setMsgs] = useState(initialMsgs)
 
-export function MessagesClient({ messages: initial }: { messages: Message[] }) {
-  const [messages, setMessages] = useState(initial)
-  const [expanded, setExpanded] = useState<string | null>(null)
-
-  async function toggleRead(msgId: string, isRead: boolean) {
-    await fetch(`/api/admin/messages/${msgId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isRead: !isRead }),
-    })
-    setMessages((prev) => prev.map((m) => (m.id === msgId ? { ...m, isRead: !isRead } : m)))
+  const markRead = async (id: string) => {
+    try {
+      const res = await fetch(`/api/admin/messages/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ isRead: true }) })
+      if (res.ok) { setMsgs(msgs.map((m) => m.id === id ? { ...m, isRead: true } : m)); toast.success('Marked as read') }
+    } catch { toast.error('Failed') }
   }
 
-  async function deleteMessage(msgId: string) {
-    if (!confirm("Delete this message?")) return
-    await fetch(`/api/admin/messages/${msgId}`, { method: "DELETE" })
-    setMessages((prev) => prev.filter((m) => m.id !== msgId))
+  const deleteMsg = async (id: string) => {
+    if (!confirm('Delete this message?')) return
+    try {
+      const res = await fetch(`/api/admin/messages/${id}`, { method: 'DELETE' })
+      if (res.ok) { setMsgs(msgs.filter((m) => m.id !== id)); toast.success('Deleted') }
+    } catch { toast.error('Failed') }
   }
 
   return (
-    <div className="space-y-2">
-      {messages.length === 0 ? (
-        <div className="text-center py-12 text-gray-400">No messages yet.</div>
-      ) : (
-        messages.map((msg) => (
-          <div key={msg.id} className={`border rounded-lg p-4 ${!msg.isRead ? "bg-blue-50/50 border-blue-200" : ""}`}>
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <p className="font-medium text-sm">{msg.name}</p>
-                  <span className="text-xs text-gray-500">{msg.email}</span>
-                  {!msg.isRead && <span className="w-2 h-2 rounded-full bg-blue-500" />}
-                </div>
-                <p className="text-sm font-medium text-gray-700 mt-1">{msg.subject}</p>
-                {expanded === msg.id && (
-                  <p className="text-sm text-gray-600 mt-2 whitespace-pre-wrap">{msg.message}</p>
-                )}
-                <p className="text-xs text-gray-400 mt-1">{new Date(msg.createdAt).toLocaleString()}</p>
-              </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <Button variant="ghost" size="icon" onClick={() => setExpanded(expanded === msg.id ? null : msg.id)} title="View">
-                  <Eye className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => toggleRead(msg.id, msg.isRead)} title={msg.isRead ? "Mark unread" : "Mark read"}>
-                  <Mail className={`h-4 w-4 ${!msg.isRead ? "text-blue-500" : "text-gray-400"}`} />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => deleteMessage(msg.id)} className="text-red-400 hover:text-red-600" title="Delete">
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
+        <p className="text-gray-500 mt-1">{msgs.filter((m) => !m.isRead).length} unread messages</p>
+      </div>
+      <Card>
+        <CardContent className="p-0">
+          {msgs.length === 0 ? (
+            <div className="text-center py-12 text-gray-500"><Mail className="h-12 w-12 mx-auto mb-3 text-gray-300" /><p>No messages yet.</p></div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b bg-gray-50">
+                    <th className="text-left px-4 py-3 text-sm font-medium text-gray-500">From</th>
+                    <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 hidden sm:table-cell">Subject</th>
+                    <th className="text-left px-4 py-3 text-sm font-medium text-gray-500 hidden md:table-cell">Date</th>
+                    <th className="text-left px-4 py-3 text-sm font-medium text-gray-500">Status</th>
+                    <th className="text-left px-4 py-3 text-sm font-medium text-gray-500">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {msgs.map((m) => (
+                    <tr key={m.id} className={`border-b last:border-0 hover:bg-gray-50 ${!m.isRead ? 'bg-yellow-50/50' : ''}`}>
+                      <td className="px-4 py-3">
+                        <p className="font-medium text-sm">{m.name}</p>
+                        <p className="text-xs text-gray-500">{m.email}</p>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600 hidden sm:table-cell">{m.subject}</td>
+                      <td className="px-4 py-3 text-sm text-gray-500 hidden md:table-cell">{new Date(m.date).toLocaleDateString()}</td>
+                      <td className="px-4 py-3">
+                        {!m.isRead && <Badge className="bg-yellow-100 text-yellow-800">Unread</Badge>}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="ghost" size="sm"><Eye className="h-4 w-4" /></Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-lg">
+                              <DialogHeader><DialogTitle>{m.subject}</DialogTitle></DialogHeader>
+                              <div className="space-y-2 text-sm">
+                                <p><span className="font-medium">From:</span> {m.name} ({m.email})</p>
+                                <p><span className="font-medium">Date:</span> {new Date(m.date).toLocaleString()}</p>
+                                <div className="bg-gray-50 p-4 rounded-lg mt-3 whitespace-pre-wrap">{m.message}</div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                          {!m.isRead && (
+                            <Button variant="ghost" size="sm" onClick={() => markRead(m.id)} title="Mark Read"><CheckCircle className="h-4 w-4" /></Button>
+                          )}
+                          <Button variant="ghost" size="sm" className="text-red-500" onClick={() => deleteMsg(m.id)}><Trash2 className="h-4 w-4" /></Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          </div>
-        ))
-      )}
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

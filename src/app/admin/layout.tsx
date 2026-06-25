@@ -1,16 +1,23 @@
-import { requireRole } from "@/lib/auth-helper"
-import { AdminSidebar } from "./AdminSidebar"
+import { requireRole } from '@/lib/auth-helper'
+import HideSiteChrome from '@/components/HideSiteChrome'
+import AdminSidebar from './AdminSidebar'
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  await requireRole("ADMIN")
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const session = await requireRole('ADMIN')
 
   return (
     <>
-      <style>{`.site-header, .site-footer { display: none !important; } .site-wrapper { min-height: 100vh; }`}</style>
+      <HideSiteChrome />
       <div className="flex h-screen bg-gray-50">
-        <AdminSidebar />
+        <AdminSidebar user={session.user} />
         <main className="flex-1 p-4 lg:p-8 overflow-auto">
-          {children}
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </>
